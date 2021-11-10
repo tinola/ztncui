@@ -684,6 +684,8 @@ exports.members = async function(req, res) {
         }
       }
     }
+  } else { // GET
+    res.redirect("/controller/network/" + req.params.nwid + "#members");
   }
 }
 
