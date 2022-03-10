@@ -135,13 +135,16 @@ block net_content
                 span(style='color: red;') OFFLINE
             td
               if (peer)
-                each path in peer.paths
-                  - const [ip, port] = path.address.split('/');
+                - var paths = peer.paths.sort((a, b) => b.lastReceive - a.lastReceive)
+                if (paths.length > 0)
+                  - const [ip, port] = paths[0].address.split('/');
                   = ip
                   span(style='color: gray;') /#{port}
                   = ' '
                 if (peer.latency != -1)
                   br
+                  if (paths.length > 0)
+                    | (#{Math.floor((Date.now() - paths[0].lastReceive) / 1000)}s ago) 
                   | (#{peer.latency} ms)
         else
           .alert.alert-info
