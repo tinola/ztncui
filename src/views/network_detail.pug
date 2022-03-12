@@ -96,7 +96,9 @@ block net_content
           td(width='17%')
             | Peer status
           td(width='13%')
-            | Peer address / latency
+            | Peer address
+            br
+            | (latency / last active)
         each member in members
           - const peer = member.peer;
           tr
@@ -143,9 +145,12 @@ block net_content
                   = ' '
                 if (peer.latency != -1)
                   br
+                  | (
+                  =peer.latency
+                  | ms
                   if (paths.length > 0)
-                    | (#{Math.floor((Date.now() - paths[0].lastReceive) / 1000)}s ago) 
-                  | (#{peer.latency} ms)
+                    |  / #{Math.floor((Date.now() - paths[0].lastReceive) / 1000)}s ago
+                  |)
         else
           .alert.alert-info
             strong There are no members on this network - invite users to join #{network.nwid}
