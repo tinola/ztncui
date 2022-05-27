@@ -82,23 +82,23 @@ block net_content
      input#q.form-control.text(type='text' name='q' autocomplete='off' style='width: 200px; display: inline-block; vertical-align: middle; margin-left: 10px;' placeholder='Search for...' onkeyup='doSearch();')
 
     form(method='POST' action='')
-      table.table.table-responsive.table-striped.table-hover
+      table#tbl-members.table.table-responsive.table-striped.table-hover
         tr
-          td(width='3%')
+          th(width='3%')
             = ''
-          td(width='20%')
+          th(width='20%' style='vertical-align: middle;')
             | Member name
-          td(width='10%')
+          th(width='10%' style='vertical-align: middle;')
             | Member ID
-          td(width='10%')
+          th(width='10%' style='vertical-align: middle; text-align: center;')
             | Authorized
-          td(width='10%')
+          th(width='10%' style='vertical-align: middle; text-align: center;')
             | Active bridge
-          td(width='17%')
+          th(width='17%' style='vertical-align: middle;')
             | IP assignment
-          td(width='17%')
+          th(width='17%' style='vertical-align: middle;')
             | Peer status
-          td(width='13%')
+          th(width='23%')
             | Peer address
             br
             | (latency / last active)
@@ -113,9 +113,9 @@ block net_content
               input.form-control.text(type='text' name=member.id value=member.name)
             td
               a(href=url) #{member.id}
-            td
+            td(style='text-align: center;')
               input.authCheck(type='checkbox' value=member.id checked=(member.authorized? true : false))
-            td
+            td(style='text-align: center;')
               input.bridgeCheck(type='checkbox' value=member.id checked=(member.activeBridge? true : false))
             td
               each ipAssignment in member.ipAssignments
@@ -173,21 +173,34 @@ block net_content
   script(type='text/javascript').
     //<!--
      function doSearch() {
-      var q = document.getElementById("q");
-      var v = q.value.toLowerCase();
-      var rows = document.getElementsByTagName("tr");
-      var on = 0;
-      for ( var i = 0; i < rows.length; i++ ) {
-       var fullname = rows[i].getElementsByTagName("td");
-       fullname = fullname[1].innerHTML.toLowerCase();
-       if ( fullname ) {
-        if ( v.length == 0 || (v.length < 1 && fullname.indexOf(v) == 0) || (v.length >= 1 && fullname.indexOf(v) > -1 ) ) {
-        rows[i].style.display = "";
-        on++;
-       } else {
-        rows[i].style.display = "none";
+       // search only columns 2, 3, 6, 7 and 8 in the members table
+       var input, filter, tr, td, i, col2, col3, col6, col7, col8;
+       input = document.getElementById("q");
+       filter = input.value.toUpperCase();
+       table = document.getElementById("tbl-members");
+       tr = table.getElementsByTagName("tr");
+       for (i = 1; i < tr.length; i++) {
+         td2 = tr[i].getElementsByTagName("td")[1];
+         td3 = tr[i].getElementsByTagName("td")[2];
+         td6 = tr[i].getElementsByTagName("td")[5];
+         td7 = tr[i].getElementsByTagName("td")[6];
+         td8 = tr[i].getElementsByTagName("td")[7];
+         if (td2 || td3 || td6 || td7 || td8) {
+           col2 = td2.textContent || td2.innerHTML;
+           col3 = td3.textContent || td3.innerText;
+           col6 = td6.textContent || td6.innerText;
+           col7 = td7.textContent || td7.innerText;
+           col8 = td8.textContent || td8.innerText;
+           if ((col2.toUpperCase().indexOf(filter) > -1) ||
+               (col3.toUpperCase().indexOf(filter) > -1) ||
+               (col6.toUpperCase().indexOf(filter) > -1) ||
+               (col7.toUpperCase().indexOf(filter) > -1) ||
+               (col8.toUpperCase().indexOf(filter) > -1)) {
+             tr[i].style.display = "";
+           } else {
+             tr[i].style.display = "none";
+           }
+         }
        }
-      }
      }
-    }
     //-->
