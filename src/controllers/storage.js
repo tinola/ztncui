@@ -1,12 +1,32 @@
 const storage = require('node-persist').create();
 
 /**
- * @typedef {{ name: string, description: string }} MemberInfo
- * @typedef {{ rulesSource: string, description: string }} NetworkInfo
+ * @typedef UserInfo (not implemented)
+ * @prop {string} name
+ * @prop {boolean} pass_set
+ * @prop {string} hash
+ * @prop {UserRole} role
+ * 
+ * @typedef {'superadmin' | 'admin'} UserRole
+ * 
+ * @typedef MemberInfo
+ * @prop {string} name
+ * @prop {string} description (not implemented)
+ * 
+ * @typedef NetworkInfo
+ * @prop {string} rulesSource (not implemented)
+ * @prop {string} description (not implemented)
+ * @prop {string[]} admins (not implemented)
  */
+
+/** not implemented */
+const globalSettings = {
+    memberNamePerNetwork: false,
+};
 
 exports.init = init;
 async function init() {
+    // migration from old storage
     const v1 = require('node-persist').create();
     await v1.init({ dir: 'etc/storage' });
     await storage.init({ dir: 'etc/storage-v2' });
