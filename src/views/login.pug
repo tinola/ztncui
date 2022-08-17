@@ -43,3 +43,5 @@ block login_content
           button.btn.btn-primary(type='submit') Login
           = ' '
           a.btn.btn-default(href='/' name='cancel' role='button') Cancel
+    if oidc
+      a.btn.btn-primary(href='/login_oidc') OIDC Login

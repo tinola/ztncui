@@ -31,6 +31,9 @@ router.get('/logout', function(req, res) {
 });
 
 router.get('/login', guest_only, function(req, res) {
+  if (auth.oidcOnly) {
+    return auth.oidcLogin(req, res);
+  }
   let message = null;
   if (req.session.error) {
     if (req.session.error !== 'Access denied!') {
@@ -39,10 +42,14 @@ router.get('/login', guest_only, function(req, res) {
   } else {
     message = req.session.success;
   }
-  res.render('login', { title: 'Login', message: message });
+  res.render('login', { title: 'Login', message: message, oidc: auth.oidcAvailable });
 });
 
 router.post('/login', async function(req, res) {
+  if (auth.oidcOnly) {
+    res.status(400).send('password login disabled');
+    return;
+  }
   await authenticate(req.body.username, req.body.password, function(err, user) {
     if (user) {
       req.session.regenerate(function() {
@@ -60,4 +67,8 @@ router.post('/login', async function(req, res) {
     }
   });
 });
+
+router.get('/login_oidc', guest_only, auth.oidcLogin);
+router.post('/login_oidc_cb', guest_only, auth.oidcCallback);
+
 module.exports = router;

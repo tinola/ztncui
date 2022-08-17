@@ -6,29 +6,28 @@
 
 const express = require('express');
 const router = express.Router();
-const auth = require('../controllers/auth');
-const restrict = auth.restrict;
+const { restrict, restrictSuperAdmin } = require('../controllers/auth');
 const usersController = require('../controllers/usersController');
 
 // GET request for users
-router.get('/', restrict, usersController.users_list);
+router.get('/', restrict, restrictSuperAdmin, usersController.users_list);
 
 // GET request for password
-router.get('/:name/password', restrict, usersController.password_get);
+router.get('/:name/password', restrict, restrictSuperAdmin, usersController.password_get);
 
 // POST request for password
-router.post('/:name/password', restrict, usersController.password_post);
+router.post('/:name/password', restrict, restrictSuperAdmin, usersController.password_post);
 
 // GET request for user create
-router.get('/create', restrict, usersController.user_create_get);
+router.get('/create', restrict, restrictSuperAdmin, usersController.user_create_get);
 
 // POST request for user create
-router.post('/create', restrict, usersController.user_create_post);
+router.post('/create', restrict, restrictSuperAdmin, usersController.user_create_post);
 
 // GET request for user delete
-router.get('/:name/delete', restrict, usersController.user_delete);
+router.get('/:name/delete', restrict, restrictSuperAdmin, usersController.user_delete);
 
 // POST request for user delete
-router.post('/:name/delete', restrict, usersController.user_delete);
+router.post('/:name/delete', restrict, restrictSuperAdmin, usersController.user_delete);
 
 module.exports = router;
