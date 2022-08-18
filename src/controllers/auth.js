@@ -97,7 +97,7 @@ const useOidc = !!AUTH_OIDC_ISSUER;
 const callbackUrl = BASE_URL + '/login_oidc_cb';
 
 exports.oidcAvailable = useOidc;
-exports.oidcOnly = AUTH_OIDC_ONLY;
+exports.oidcOnly = AUTH_OIDC_ONLY === 'true';
 
 const oidcClient = !useOidc ? null : (async () => {
   const issuer = await Issuer.discover(AUTH_OIDC_ISSUER);
