@@ -9,6 +9,7 @@ const ipaddr = require('ip-address');
 const storage = require('./storage');
 const zt = require('./zt');
 const util = require('util');
+const { hasRightsForNetwork } = require('./auth');
 
 
 async function get_network_with_members(nwid) {
@@ -71,7 +72,7 @@ exports.network_list = async function(req, res) {
     }
 
   try {
-    networks = await zt.network_list();
+    networks = await zt.network_list((nwid) => hasRightsForNetwork(req.session.user, nwid));
     res.render('networks', {title: 'Networks on this controller', navigate: navigate, networks: networks});
   } catch (err) {
     res.render('networks', {title: 'Networks on this controller', navigate: navigate, error: 'Error retrieving list of networks on this controller: ' + err});

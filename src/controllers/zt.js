@@ -46,7 +46,7 @@ const get_zt_address = async function() {
 }
 exports.get_zt_address = get_zt_address;
 
-exports.network_list = async function() {
+exports.network_list = async function(nwidFilter) {
   const options = await init_options();
 
   let network = {};
@@ -59,6 +59,8 @@ exports.network_list = async function() {
   } catch(err) {
     throw(err);
   }
+
+  if (nwidFilter) nwids = nwids.filter(nwidFilter);
 
   for (let nwid of nwids) {
     try {

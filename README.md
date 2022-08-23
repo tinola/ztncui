@@ -238,6 +238,21 @@ Open PuTTY and configure as follows:
 
 Once the SSH tunnel has been established, access the ztncui web interface in a web browser on your local machine at: http://localhost:3333
 
+##### 11. OpenID Connect Login
+
+While password login is used by default, you can enable OpenID Connect (OIDC) login by settings these options:
+
+```dotenv
+# Required:
+AUTH_OIDC_ISSUER=https://myissuer.example.org
+AUTH_OIDC_CLIENT_ID=
+AUTH_OIDC_CLIENT_SECRET=
+BASE_URL=https://myztncui.example.org
+
+# Optional, to disable password login:
+AUTH_OIDC_ONLY=true
+```
+
 ## Usage
 ### User accounts
 Once you have access to the web UI of ztncui, log in as user **admin** with password **password**.
